@@ -1,5 +1,4 @@
 ﻿using BasicCRUDwith.NETCore.Controllers;
-using BasicCRUDwith.NETCore.DbContexts;
 using BasicCRUDwith.NETCore.Models;
 using BasicCRUDwith.NETCore.Repositories;
 using Microsoft.AspNetCore.Mvc;
