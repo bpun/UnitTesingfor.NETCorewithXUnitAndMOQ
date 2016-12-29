@@ -1,4 +1,6 @@
 ﻿using BasicCRUDwith.NETCore.DbContexts;
+using BasicCRUDwith.NETCore.Models;
+using BasicCRUDwith.NETCore.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +32,11 @@ namespace BasicCRUDwith.NETCore
             services.AddDbContext<StudentContext>(options =>
                 options.UseSqlServer(connectingString));
 
+            services.AddScoped<IBaseRepository<Student>, BaseRepository<Student>>();
+
             // Add framework services.
             services.AddMvc();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

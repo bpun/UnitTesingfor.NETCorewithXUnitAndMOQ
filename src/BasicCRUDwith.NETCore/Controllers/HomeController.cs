@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using BasicCRUDwith.NETCore.Models;
-using BasicCRUDwith.NETCore.DbContexts;
+using BasicCRUDwith.NETCore.Repositories;
 
 namespace BasicCRUDwith.NETCore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly StudentContext _context;
+        private readonly IBaseRepository<Student> _iRepository;
         public HomeController(
-           StudentContext context
+           IBaseRepository<Student> iRepository
         )
         {
-            _context = context;
+            _iRepository = iRepository;
         }
         [HttpGet]
         public IActionResult Index()
         {
-            var data = _context.Students.ToList();
+            var data = _iRepository.GetAll().ToList();
 
             return View(data);
         }
@@ -28,7 +25,7 @@ namespace BasicCRUDwith.NETCore.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View("Create");
         }
 
         [HttpPost]
@@ -36,26 +33,28 @@ namespace BasicCRUDwith.NETCore.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Students.Add(student);
-                _context.SaveChanges();
+                _iRepository.Add(student);
+                _iRepository.Commit();
 
-                return RedirectToAction("Index");
+                return View("Index");
+                // return RedirectToAction("Index");
             }
-
-            return View(student);
+            else{ 
+                return View("Create");
+            }
         }
 
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int id)
         {
-            if (id == null || id <= 0)
+            if (id <= 0)
             {
                 return NotFound();
             }
             else
             {
-                var data = _context.Students.FirstOrDefault(x => x.ID == id);
+                var data = _iRepository.GetById(id);
                 return View(data);
             }
         }
@@ -69,8 +68,8 @@ namespace BasicCRUDwith.NETCore.Controllers
             }
             if (ModelState.IsValid)
             {
-                _context.Students.Update(student);
-                _context.SaveChanges();
+                _iRepository.Update(student);
+                _iRepository.Commit();
 
                 return RedirectToAction("Index");
             }
@@ -78,14 +77,16 @@ namespace BasicCRUDwith.NETCore.Controllers
         }
         public IActionResult Delete(int id)
         {
-            var student = _context.Students.FirstOrDefault(m => m.ID == id);
+            var student = _iRepository.GetById(id);
             if (student == null)
             {
                 return RedirectToAction("Index");
             }
-            _context.Students.Remove(student);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+            _iRepository.Delete(student);
+            _iRepository.Commit();
+
+            return View("Index");
+          //  return RedirectToAction("Index");
         }
     }
 }
