@@ -3,7 +3,8 @@
     "BasicCRUDwith.NETCore": "1.0.0-*",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "xunit": "2.2.0-beta2-build3300",
-    "Moq": "4.6.36-*"
+    "Moq": "4.6.36-*",
+    "Microsoft.DotNet.InternalAbstractions": "1.0.0"
   },
   "frameworks": {
     "netcoreapp1.0": {
